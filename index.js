@@ -16,7 +16,7 @@ const db = mysql.createConnection(
       password: 'Batman-robin#136!',
       database: 'employee_db'
     },
-    console.log(`Connected to the employer_db database.`)
+    console.log(`Connected to the employee_db database.`)
   );
 
   db.query('', function (err, results) {
