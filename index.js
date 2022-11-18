@@ -14,7 +14,7 @@ const db = mysql.createConnection(
     {
       host: 'localhost', 
       user: 'root', // process.DB.USER
-      password: 'Batman-robin#136!', // process.DB_PASSWORD
+      password: '', // process.DB_PASSWORD
       database: 'employee_db' // process.DB_NAME
     },
     console.log(`Connected to the employee_db database.`)
@@ -24,13 +24,7 @@ const db = mysql.createConnection(
 //     console.log(results);
 //   })
 
-const init = () => {
-    inquirer.prompt({
-        type: 'input',
-        name: 'Department_id',
-        message: 'Which '
-    })
-}
+
 
 
   app.listen(PORT, () => {
