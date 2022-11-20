@@ -60,6 +60,32 @@ const viewDepartments = () => {
     });
 }
 
+const viewRoles = () => {
+    db.query('', function (err, results){
+        console.log(results);
+        init();
+    })
+}
+
+const viewEmployees = () => {
+    db.query('', function (err, results) {
+        console.log(results);
+        init();
+    })
+}
+
+const addDepartment = () => {
+    inquirer.prompt({
+        type:'input',
+        name: 'departmentAdd',
+        message: 'What department would you like added?'
+    }).then(answer => {
+
+    })
+}
+
+
+
 
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
