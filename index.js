@@ -2,11 +2,11 @@ const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const dotenv = require('dotenv');
 
-const PORT = process.env.PORT || 5001;
-const app = express();
+// const PORT = process.env.PORT || 5001;
+// const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
 dotenv.config();
 
@@ -14,26 +14,26 @@ const db = mysql.createConnection(
     {
       host: 'localhost', 
       user: 'root', // process.env.DB.USER
-      password: '', // process.DB_PASSWORD
-      database: 'employee_db' // process.DB_NAME
+      password: 'Batman-robin#136!', // process.envDB_PASSWORD
+      database: 'employee_db' // process.env.DB_NAME 
     },
     console.log(`Connected to the employee_db database.`)
   );
-
+// const db= {}
 //   db.query('', function (err, results) {
 //     console.log(results);
 //   })
 
 
-const init = () => {
-    inquirer.prompt({
+const init = async function () {
+   await inquirer.prompt([{
         type: 'list',
         name: 'mainMenu',
         message: 'What would you like to do?',
-        choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role', 'Quit']
-    }).then(answer => {
+        choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role']
+    }]).then(answer => {
         if (answer.mainMenu === 'Quit') {
-            process.exit();
+            // process.exit();
         }
         else if (answer.mainMenu === 'View all departments') {
             viewDepartments();
@@ -54,14 +54,14 @@ const init = () => {
 };
 
 const viewDepartments = () => {
-    db.query('SELECT * FROM departments', function (err, results) {
+    db.query('SELECT * FROM department', function (err, results) {
         console.log(results);
         init();
     });
 }
 
 const viewRoles = () => {
-    db.query('', function (err, results){
+    db.query('SELECT roles.id AS role_id,  ', function (err, results){
         console.log(results);
         init();
     })
@@ -69,6 +69,7 @@ const viewRoles = () => {
 
 const viewEmployees = () => {
     db.query('', function (err, results) {
+        if (err) console.log(err)
         console.log(results);
         init();
     })
@@ -80,7 +81,12 @@ const addDepartment = () => {
         name: 'departmentAdd',
         message: 'What department would you like added?'
     }).then(answer => {
-        db.
+        let insertQuery = `INSERT INTO department (name) VALUES ('${answer.departmentAdd}')`;
+        db.query(insertQuery, function (err, results) {
+            if (err) console.log(err)
+            console.log(results)
+            init()
+        })
     })
 }
 
@@ -100,12 +106,16 @@ inquirer.prompt ([
         type: 'list',
         name: 'roledepartment',
         message: 'Which department does the role belong to?',
-        choices: 
+        choices: [1,2,3,4,5]
     }
-]).then(answers => {
-
+]).then(answer => {
+    let insertQuery = `INSERT INTO role (title, salary, department_id) VALUES ('${answer.rolename}', '${answer.rolesalary}', '${answer.roledepartment}')`;
+        db.query(insertQuery, function (err, results) {
+            if (err) console.log(err)
+            console.log(results)
+            init()
 })
-}
+})}
 
 const addEmployee = () => {
     inquirer.prompt ([
@@ -122,14 +132,14 @@ const addEmployee = () => {
         {
             type: 'list',
             name: 'employeerole',
-            message: 'What is the employees role?'
-            choices: 
+            message: 'What is the employees role?',
+            choices: []
         },
         {
             type: 'list',
             name: 'employeemanager',
-            message: 'Who is the employees manager?'
-            choices:
+            message: 'Who is the employees manager?',
+            choices: []
         }
 
     ]).then(answers => {
@@ -142,14 +152,14 @@ const updateEmployee = () => {
         {
             type: 'list',
             name: 'listUpdate',
-            message: "Which employees would you like to update?"
-            choices: 
+            message: "Which employees would you like to update?",
+            choices: []
         },
         {
             type: 'list',
             name: 'listRole',
-            message: 'What roles are the new employees filling?'
-            choices: 
+            message: 'What roles are the new employees filling?',
+            choices: []
         }
     ]).then(answers => {
 
@@ -157,7 +167,3 @@ const updateEmployee = () => {
 }
 
 init();
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-  
