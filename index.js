@@ -14,7 +14,7 @@ const db = mysql.createConnection(
     {
       host: 'localhost', 
       user: 'root', // process.env.DB.USER
-      password: 'Batman-robin#136!', // process.envDB_PASSWORD
+      password: process.env.DB_PASSWORD, // process.envDB_PASSWORD
       database: 'employee_db' // process.env.DB_NAME 
     },
     console.log(`Connected to the employee_db database.`)
@@ -60,15 +60,16 @@ const viewDepartments = () => {
     });
 }
 
+
 const viewRoles = () => {
-    db.query('SELECT roles.id AS role_id,  ', function (err, results){
+    db.query('SELECT * FROM role',  function (err, results){
         console.log(results);
         init();
     })
 }
 
 const viewEmployees = () => {
-    db.query('', function (err, results) {
+    db.query('SELECT * FROM employee', function (err, results) {
         if (err) console.log(err)
         console.log(results);
         init();
@@ -133,17 +134,22 @@ const addEmployee = () => {
             type: 'list',
             name: 'employeerole',
             message: 'What is the employees role?',
-            choices: []
+            choices: ['Lead Engnieer', 'Human Resources Representative', 'Accountant', 'Lawyer', 'Salesperson']
         },
         {
             type: 'list',
             name: 'employeemanager',
             message: 'Who is the employees manager?',
-            choices: []
+            choices: ['Alfred', 'Zelda', 'Anakin']
         }
 
-    ]).then(answers => {
-
+    ]).then(answer => {
+        let insertQuery = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${answer.firstname}', '${answer.lastname}', '${answer.employeerole}', '${answer.employeemanager}')`;
+        db.query(insertQuery, function (err, results) {
+            if (err) console.log(err)
+            console.log(results)
+            init()
+        })  
     })
 }
 
