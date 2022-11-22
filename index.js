@@ -55,6 +55,7 @@ const init = async function () {
 
 const viewDepartments = () => {
     db.query('SELECT * FROM department', function (err, results) {
+        if (err) console.log(err)
         console.log(results);
         init();
     });
@@ -63,6 +64,7 @@ const viewDepartments = () => {
 
 const viewRoles = () => {
     db.query('SELECT * FROM role',  function (err, results){
+        if (err) console.log(err)
         console.log(results);
         init();
     })
@@ -110,9 +112,13 @@ inquirer.prompt ([
         choices: [1,2,3,4,5]
     }
 ]).then(answer => {
-    let insertQuery = `INSERT INTO role (title, salary, department_id) VALUES ('${answer.rolename}', '${answer.rolesalary}', '${answer.roledepartment}')`;
+    let insertQuery = `INSERT INTO role (title, salary, department_id) VALUES ('${answer.rolename}', ${answer.rolesalary}, '${answer.roledepartment}')`;
         db.query(insertQuery, function (err, results) {
             if (err) console.log(err)
+            else {
+                // console.log(`Added ${title} to database`)
+                // console.log(id, title, salary, department_id)
+            }
             console.log(results)
             init()
 })
@@ -153,23 +159,23 @@ const addEmployee = () => {
     })
 }
 
-const updateEmployee = () => {
-    inquirer.prompt([
-        {
-            type: 'list',
-            name: 'listUpdate',
-            message: "Which employees would you like to update?",
-            choices: []
-        },
-        {
-            type: 'list',
-            name: 'listRole',
-            message: 'What roles are the new employees filling?',
-            choices: []
-        }
-    ]).then(answers => {
+// const updateEmployee = () => {
+//     inquirer.prompt([
+//         {
+//             type: 'list',
+//             name: 'listUpdate',
+//             message: "Which employees would you like to update?",
+//             choices: []
+//         },
+//         {
+//             type: 'list',
+//             name: 'listRole',
+//             message: 'What roles are the new employees filling?',
+//             choices: []
+//         }
+//     ]).then(answers => {
 
-    })
-}
+//     })
+// }
 
 init();
